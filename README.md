@@ -1,8 +1,8 @@
 # Story_Validator_Setup_Guide
-# Hướng dẫn Cài đặt và Chạy Node cho Dự án Story đầy đủ (Story_Protocol_Validator Node Setup Guide Full)
+## Hướng dẫn Cài đặt và Chạy Node cho Dự án Story đầy đủ (Story_Protocol_Validator Node Setup Guide Full)
 Story raised $140M from Tier1 investors. Story is a blockchain making IP protection and licensing programmable and efficient. It automates IP management, allowing creators to easily license, remix, and monetize their work. With Story, traditional legal complexities are replaced by on-chain smart contracts and off-chain legal agreements, simplifying the entire process.
 
-### 1. **Thông số Phần cứng anh em mua VPS** (System Requirements)
+## 1. **Thông số Phần cứng anh em mua VPS** (System Requirements)
 
 Mọi người có thể mua ở đây bằng USDT, ETH, BTC... 
 https://pq.hosting/?from=719019
@@ -16,7 +16,7 @@ https://pq.hosting/?from=719019
 
 Follow our TG : https://t.me/Crypto_Confessions
 
-### **Ghi chú**
+## **Ghi chú**
 
 - Hệ điều hành: Ubuntu 22.04
 - Công cụ cài đặt trên Windown: Bitvise => tải tại đây => https://bitvise.com/ssh-client-download
@@ -304,7 +304,7 @@ journalctl -u story.service
 ```
 
 # 9. Delete node
-Chú ý: Backup your data, private key, validator key before remove node.
+WARNING: Backup your data, private key, validator key before remove node.
 ```
 sudo systemctl stop story-geth
 sudo systemctl stop story
