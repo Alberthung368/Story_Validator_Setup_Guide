@@ -14,7 +14,7 @@ https://pq.hosting/?from=719019
 | **Disk**     | 200 GB                  |
 | **Bandwidth**| 10 MBit/s               |
 
-Follow our TG : (https://t.me/Crypto_Confessions)
+Follow our TG : https://t.me/Crypto_Confessions
 
 ### **Ghi chú**
 
@@ -82,7 +82,7 @@ story init --network iliad --moniker "Your_moniker_name"
 ```
 
 ## 3. Cấu hình Dịch vụ
-## 3.1. Cấu hình dịch vụ story-geth (Create story-geth service file)
+## Cấu hình dịch vụ story-geth (Create story-geth service file)
 ```
 sudo tee /etc/systemd/system/story-geth.service > /dev/null <<EOF
 [Unit]
@@ -100,7 +100,7 @@ LimitNOFILE=4096
 WantedBy=multi-user.target
 EOF
 ```
-## 3.2. 3.2. Cấu hình dịch vụ story (Create story service file)
+## Cấu hình dịch vụ story (Create story service file)
 
 ```
 sudo tee /etc/systemd/system/story.service > /dev/null <<EOF
@@ -234,7 +234,7 @@ Hoặc dùng lệnh này cũng lấy đc private key:
 ```
 cat /root/.story/story/config/private_key.txt
 ```
-### 3. Import Key to Metamask 
+### 3. Import Priavte Key to Metamask 
 
 Get the wallet address for faucet
 
@@ -242,12 +242,12 @@ Get the wallet address for faucet
 
 Get it from faucet : https://faucet.story.foundation/
 
-### Chờ khi nào trạng thái "catchin_up": false' (Check the sync the catching up must be 'false')
+## Chờ khi nào trạng thái "catchin_up": false' (Check the sync the catching up must be 'false')
 Dùng lệnh này để check Sync
 ```
 curl -s localhost:26657/status | jq
 ```
-Stake only after "catching_up": false
+Chỉ stake khi trạng thái "catching_up": false
 
 ### 5. Validator registering
 
@@ -265,8 +265,9 @@ curl -s localhost:26657/status | jq -r '.result.validator_info'
 ### 7. check your validator
 
 Explorer: https://testnet.story.explorers.guru/
+Paste HEX Validator Address to search
 
-## BACK UP FILE
+# BACK UP FILE
 
 ### 1. Wallet private key:
 ```
@@ -277,28 +278,43 @@ sudo nano ~/.story/story/config/private_key.txt
 ```
 sudo nano ~/.story/story/config/priv_validator_key.json
 ```
-## 7. Quản lý Dịch vụ
-## 7.1. Khởi động dịch vụ
+
+# 7. Quản lý Dịch vụ
+### 7.1. Khởi động dịch vụ
 ```
 sudo systemctl daemon-reload
 sudo systemctl start story-geth.service
 sudo systemctl start story.service
 ````
-## 7.2. Dừng dịch vụ
+### 7.2. Dừng dịch vụ
 ```
 sudo systemctl stop story-geth.service
 sudo systemctl stop story.service
 ````
-## 7.3. Kích hoạt dịch vụ tự động khởi động cùng hệ thống
+### 7.3. Kích hoạt dịch vụ tự động khởi động cùng hệ thống
 ```
 sudo systemctl enable story-geth.service
 sudo systemctl enable story.service
 ````
-## 8. Khắc phục sự cố 
+### 8. Khắc phục sự cố 
 Lỗi khi khởi động dịch vụ: Kiểm tra logs dịch vụ bằng lệnh 
 ```
 journalctl -u story-geth.service
 journalctl -u story.service
 ```
 
-## Join our TG : https://t.me/Crypto_Confessions
+# 9. Delete node
+Chú ý: Backup your data, private key, validator key before remove node.
+```
+sudo systemctl stop story-geth
+sudo systemctl stop story
+sudo systemctl disable story-geth
+sudo systemctl disable story
+sudo rm /etc/systemd/system/story-geth.service
+sudo rm /etc/systemd/system/story.service
+sudo systemctl daemon-reload
+sudo rm -rf $HOME/.story
+sudo rm $HOME/go/bin/story-geth
+sudo rm $HOME/go/bin/story
+```
+# Join our TG : https://t.me/Crypto_Confessions
