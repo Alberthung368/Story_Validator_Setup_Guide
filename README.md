@@ -1,6 +1,6 @@
-# Story_Validator_Setup_Guide
-## Hướng dẫn Cài đặt và Chạy Node cho Dự án Story đầy đủ (Story_Protocol_Validator Node Setup Guide Full)
-Story raised $140M from Tier1 investors. Story is a blockchain making IP protection and licensing programmable and efficient. It automates IP management, allowing creators to easily license, remix, and monetize their work. With Story, traditional legal complexities are replaced by on-chain smart contracts and off-chain legal agreements, simplifying the entire process.
+# Hướng dẫn Cài đặt và Chạy Node cho Dự án Story (Story_Protocol_Validator Node Setup Guide Full)
+
+Info: Story raised $140M from Tier1 investors. Story is a blockchain making IP protection and licensing programmable and efficient. It automates IP management, allowing creators to easily license, remix, and monetize their work. With Story, traditional legal complexities are replaced by on-chain smart contracts and off-chain legal agreements, simplifying the entire process.
 
 ## 1. **Thông số Phần cứng anh em mua VPS** (System Requirements)
 
@@ -14,13 +14,12 @@ https://pq.hosting/?from=719019
 | **Disk**     | 200 GB                  |
 | **Bandwidth**| 10 MBit/s               |
 
-Follow our TG : https://t.me/Crypto_Confessions
+Tham gia với chúng tôi trên group telegram => https://t.me/Crypto_Confessions
 
 ## **Ghi chú**
 
 - Hệ điều hành: Ubuntu 22.04
 - Công cụ cài đặt trên Windown: Bitvise => tải tại đây => https://bitvise.com/ssh-client-download
-- Các công cụ cơ bản: `curl`, `git`, `make`, `jq`, `build-essential`, `gcc`, `unzip`, `wget`, `lz4`, `aria2`
   
 ## 2. Cài đặt (Install)
 
@@ -31,7 +30,7 @@ sudo apt-get update
 sudo apt install curl git make jq build-essential gcc unzip wget lz4 aria2 pv -y
 ```
 
-## Tạo thư mục $HOME/go/bin (Install Go)
+## 2.2 Tạo thư mục $HOME/go/bin (Install Go)
 ```
 cd $HOME && \
 ver="1.22.0" && \
@@ -44,7 +43,7 @@ source ~/.bash_profile && \
 go version
 ```
 
-## Tải xuống và cài đặt story-geth (Download Story-Geth binary)
+## 2.3. Tải xuống và cài đặt story-geth (Download Story-Geth binary)
 
 ```
 wget https://story-geth-binaries.s3.us-west-1.amazonaws.com/geth-public/geth-linux-amd64-0.9.2-ea9f0d2.tar.gz
@@ -58,7 +57,7 @@ source $HOME/.bash_profile
 story-geth version
 ```
 
-## Tải xuống và cài đặt story (Download Story binary)
+## 2.4. Tải xuống và cài đặt story (Download Story binary)
 
 ```
 wget https://story-geth-binaries.s3.us-west-1.amazonaws.com/story-public/story-linux-amd64-0.9.11-2a25df1.tar.gz
@@ -72,7 +71,7 @@ source $HOME/.bash_profile
 story version
 ```
 
-## Khởi tạo Story (Initiate Iliad node)
+## 2.5. Khởi tạo Story (Initiate Iliad node)
 
 Sữa lại "Your_moniker_name" theo tên bạn mong muốn 
 (Ví dụ: story init --network iliad --moniker alberthung_story)
@@ -82,7 +81,7 @@ story init --network iliad --moniker "Your_moniker_name"
 ```
 
 ## 3. Cấu hình Dịch vụ
-## Cấu hình dịch vụ story-geth (Create story-geth service file)
+## 3.1. Cấu hình dịch vụ story-geth (Create story-geth service file)
 ```
 sudo tee /etc/systemd/system/story-geth.service > /dev/null <<EOF
 [Unit]
@@ -100,7 +99,7 @@ LimitNOFILE=4096
 WantedBy=multi-user.target
 EOF
 ```
-## Cấu hình dịch vụ story (Create story service file)
+## 3.2. Cấu hình dịch vụ story (Create story service file)
 
 ```
 sudo tee /etc/systemd/system/story.service > /dev/null <<EOF
@@ -120,7 +119,7 @@ WantedBy=multi-user.target
 EOF
 ```
 
-## Reload and start story-geth
+## 3.3. Reload and start story-geth
 ```
 sudo systemctl daemon-reload && \
 sudo systemctl enable story-geth && \
@@ -130,17 +129,19 @@ sudo systemctl start story && \
 sudo systemctl status story-geth
 ```
 
-# Check logs
+# 4. Check logs
 
-### Geth logs
+## 4.1 Geth logs
+Mở tab riêng để check
 ```
 sudo journalctl -u story-geth -f -o cat
 ```
-### Story logs
+## 4.2 Story logs
+Mở tab riêng để check
 ```
 sudo journalctl -u story -f -o cat
 ```
-### Check sync status
+## 4.3 Check sync status
 
 ```
 curl localhost:26657/status | jq
@@ -149,22 +150,22 @@ Nếu ko check được bằng lệnh trên thì check bằng lệnh này:
 ```
 curl -s localhost:26657/status | jq
 ```
-### Chú ý: nếu 2 lệnh trên không chạy được thì cài cái "jp" bằng lệnh này "sudo apt install jq" => chọn "Y" => chạy lại lệnh "curl -s localhost:26657/status | jq" là ok
+## Chú ý: nếu 2 lệnh trên không chạy được thì cài cái "jp" bằng lệnh này "sudo apt install jq" => chọn "Y" => chạy lại lệnh "curl -s localhost:26657/status | jq" là thành công
 
-# Sync đến block gần nhất (SYNC using snapshot File)
+# 5. Sync đến block gần nhất trên hệ thống (SYNC using snapshot File)
 
-### By Joseph Tran
+## By Joseph Tran
 
-### 1. Install tool
+## 5.1. Cài đặt công cụ  (Install tool)
 ```
 sudo apt-get install wget lz4 aria2 pv -y
 ```
-### 2. Stop node
+## 5.2. Stop node
 ```
 sudo systemctl stop story
 sudo systemctl stop story-geth
 ```
-### 3. Download Geth-data
+## 5.3. Download Geth-data
 ```
 cd $HOME
 rm -f Geth_snapshot.lz4
@@ -175,7 +176,8 @@ else
     echo "No snapshot found."
 fi
 ```
-### 4. Download Story-data
+Chạy đoạn lệnh trên và đợi tải Geth-data về thành công 
+## 5.4. Download Story-data
 ```
 cd $HOME
 rm -f Story_snapshot.lz4
@@ -186,47 +188,52 @@ else
     echo "No snapshot found."
 fi
 ```
-### Backup priv_validator_state.json:
+Chạy đoạn lệnh trên và đợi tải Story-data về thành công (hoặc có thể mở tab mới để chạy và tải Story-data song song với tab đang tải Geth-data cũng được.
+Sau khi tải xong Geth-data và Story-data thì chạy các lệnh dưới đây tiếp theo
+
+## Backup priv_validator_state.json:
 ```
 mv $HOME/.story/story/data/priv_validator_state.json $HOME/.story/priv_validator_state.json.backup
 ```
-### Remove old data
+## Remove old data
 ```
 rm -rf ~/.story/story/data
 rm -rf ~/.story/geth/iliad/geth/chaindata
 ```
-### Extract Story-data
+## 5.5. Extract Story-data
 ```
 sudo mkdir -p /root/.story/story/data
 ```
 ```
 lz4 -d Story_snapshot.lz4 | pv | sudo tar xv -C /root/.story/story/
 ```
-### Extract Geth-data
+Chờ tải về xong rồi tiếp tục chạy lệnh dưới
+## 5.6. Extract Geth-data
 ```
 sudo mkdir -p /root/.story/geth/iliad/geth/chaindata
 ```
 ```
 lz4 -d Geth_snapshot.lz4 | pv | sudo tar xv -C /root/.story/geth/iliad/geth/
 ```
+Chờ tải về ong rồi chạy lệnh dưới 
 
-### Move priv_validator_state.json back
+## Move priv_validator_state.json back
 ```
 mv $HOME/.story/priv_validator_state.json.backup $HOME/.story/story/data/priv_validator_state.json
 ```
-### Restart node 
+## Restart node 
 ```
 sudo systemctl start story
 sudo systemctl start story-geth
 ```
 
-# Register your Validator
+# 6. Register your Validator
 
-### 1. Export wallet:
+## 6.1. Export wallet:
 ```
 story validator export --export-evm-key
 ```
-### 2. Private key preview
+## 6.2. Private key preview
 ```
 sudo nano ~/.story/story/config/private_key.txt
 ```
@@ -234,22 +241,22 @@ Hoặc dùng lệnh này cũng lấy đc private key:
 ```
 cat /root/.story/story/config/private_key.txt
 ```
-### 3. Import Priavte Key to Metamask 
+## 6.3. Import your Priavte Key to Metamask 
 
 Get the wallet address for faucet
 
-### 4. You need at least have 10 IP on wallet
+## 6.4. You need at least have 10 IP on wallet
 
 Get it from faucet : https://faucet.story.foundation/
 
-## Chờ khi nào trạng thái "catchin_up": false' (Check the sync the catching up must be 'false')
+### Chú ý: Chờ khi nào trạng thái "catchin_up": chuyển sang "false" rồi mới được stake IP (Check the sync the catching up must be 'false')
 Dùng lệnh này để check Sync
 ```
 curl -s localhost:26657/status | jq
 ```
 Chỉ stake khi trạng thái "catching_up": false
 
-### 5. Validator registering
+## 6.5. Validator registering
 
 Replace "your_private_key" with your key from the step2
 
@@ -257,53 +264,59 @@ Replace "your_private_key" with your key from the step2
 story validator create --stake 1000000000000000000 --private-key "your_private_key"
 ```
 
-### 6. Check your validator INFO
+## 6.6. Check your validator INFO
 ```
 curl -s localhost:26657/status | jq -r '.result.validator_info' 
 ```
 
-### 7. check your validator
+## 6.7. check your validator
 
 Explorer: https://testnet.story.explorers.guru/
 Paste HEX Validator Address to search
 
-# BACK UP FILE
+## Các bạn làm hết đến bước 6.7 là đã chạy node thành công, còn node các bạn có được active hay không thì phải có đủ số lượng IP stake để lọt vô top 100 sẽ active. Kiềm tra top 100 Validators active ở đây để biết chính xác số IP cần stake => https://staking.story.foundation/
 
-### 1. Wallet private key:
+## Chúc các bạn thực hiện thành công
+
+==========================================================================
+
+# 7. MORE
+
+## BACK UP FILE
+
+## 7.1. Wallet private key:
 ```
 sudo nano ~/.story/story/config/private_key.txt
 ```
-### 2. Validator key:
-
+## 7.2. Validator key:
 ```
 sudo nano ~/.story/story/config/priv_validator_key.json
 ```
-
-# 7. Quản lý Dịch vụ
-### 7.1. Khởi động dịch vụ
+## 7.3. Quản lý Dịch vụ
+### Khởi động dịch vụ
 ```
 sudo systemctl daemon-reload
 sudo systemctl start story-geth.service
 sudo systemctl start story.service
 ````
-### 7.2. Dừng dịch vụ
+### Dừng dịch vụ
 ```
 sudo systemctl stop story-geth.service
 sudo systemctl stop story.service
 ````
-### 7.3. Kích hoạt dịch vụ tự động khởi động cùng hệ thống
+### Kích hoạt dịch vụ tự động khởi động cùng hệ thống
 ```
 sudo systemctl enable story-geth.service
 sudo systemctl enable story.service
 ````
-### 8. Khắc phục sự cố 
+### Khắc phục sự cố 
 Lỗi khi khởi động dịch vụ: Kiểm tra logs dịch vụ bằng lệnh 
 ```
 journalctl -u story-geth.service
 journalctl -u story.service
 ```
 
-# 9. Delete node
+# 8. Delete node
 WARNING: Backup your data, private key, validator key before remove node.
 ```
 sudo systemctl stop story-geth
@@ -317,4 +330,4 @@ sudo rm -rf $HOME/.story
 sudo rm $HOME/go/bin/story-geth
 sudo rm $HOME/go/bin/story
 ```
-# Join our TG : https://t.me/Crypto_Confessions
+## Tham gia nhóm telegram cùng bọn mình để kiếm nhiều dự án hay hơn tại đây https://t.me/Crypto_Confessions
