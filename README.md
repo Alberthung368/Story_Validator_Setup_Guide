@@ -154,7 +154,7 @@ curl -s localhost:26657/status | jq
 
 # 5. Sync đến block gần nhất trên hệ thống (SYNC using snapshot File)
 
-## By Joseph Tran
+## Tham khảo và trích lọc từ 'Joseph Tran': https://service.josephtran.xyz/testnet/story/installation
 
 ## 5.1. Cài đặt công cụ  (Install tool)
 ```
