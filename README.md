@@ -18,9 +18,17 @@ Tham gia với chúng tôi trên group telegram => https://t.me/Crypto_Confessio
 
 ## **Ghi chú**
 
-- Hệ điều hành: Ubuntu 22.04
+- Hệ điều hành trên VPS, chọn: Ubuntu 22.04
 - Công cụ cài đặt trên Windown: Bitvise => tải tại đây => https://bitvise.com/ssh-client-download
-  
+- Điền thông tin khi mở phần mềm Bitvise trên PC như hình:
+- ![image](https://github.com/user-attachments/assets/34ac61de-a8f5-4a78-b8fe-22610d100954)
+
+- Host: điền VPS của bạn được gửi trong email
+- Port: 22
+- Username: root
+- Initial method: pass được gửi trong mail 
+- => Accept and Save
+ 
 ## 2. Cài đặt (Install)
 
 ### 2.1. Cài đặt các công cụ cần thiết (Install dependencies)
@@ -150,7 +158,10 @@ Nếu ko check được bằng lệnh trên thì check bằng lệnh này:
 ```
 curl -s localhost:26657/status | jq
 ```
-## Chú ý: nếu 2 lệnh trên không chạy được thì cài cái "jp" bằng lệnh này "sudo apt install jq" => chọn "Y" => chạy lại lệnh "curl -s localhost:26657/status | jq" là thành công
+- Check được như hình này là đã chạy thành công.
+- ![image](https://github.com/user-attachments/assets/4108bf11-45d6-4edd-848c-42c318c39d12)
+
+### Note: nếu dùng 2 lệnh trên không chạy được thì cài "jp" bằng lệnh này "sudo apt install jq" => "Y" => chạy lại lệnh "curl -s localhost:26657/status | jq" là thành công
 
 # 5. Sync đến block gần nhất trên hệ thống (SYNC using snapshot File)
 
