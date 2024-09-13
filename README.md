@@ -260,7 +260,7 @@ Get the wallet address for faucet
 
 Get it from faucet : https://faucet.story.foundation/
 
-### Chú ý: Chờ khi nào trạng thái "catchin_up": chuyển sang "false" rồi mới chayk lệnh stake IP ở mục 6.5 (Check the sync the catching up must be 'false')
+### Chú ý: Chờ khi nào trạng thái "catchin_up": chuyển sang "false" rồi mới chạy lệnh stake IP ở mục 6.5 (Check the sync the catching up must be 'false')
 
 Dùng lệnh này để check Sync
 ```
@@ -288,7 +288,7 @@ Paste HEX Validator Address to search
 ### Các bạn làm hết đến bước 6.7 là đã chạy node thành công, tuy nhiên node chỉ chạy thành công thôi chứ chưa active node được, để active thid node phải stake số lượng IP lớn hơn validaytor của top 100.. Kiềm tra top 100 Validators active ở đây https://staking.story.foundation/ để biết chính xác số IP cần stake. 
 
 ## 6.8. Stake thêm IP trên node để node active
-- Ở bước 6.5 các bạn mới chỉ stake có 1 IP (1000000000000000000 = 1 IP), vậy khi bạn có đủ số lượng IP để stake ở thời điểm hiện tại mình viết bài này thì phải cần 4000 IP stake trong node  thì node mới active và lot vào top 100 Validators.
+- Ở bước 6.5 các bạn mới chỉ stake có 1 IP (1000000000000000000 = 1 IP), vậy khi bạn có đủ số lượng IP để stake ở thời điểm hiện tại mình viết bài này thì phải cần 4000 IP stake trong node  thì node mới active và lọt vào top 100 Validators.
 - Câu lệnh sau đây để cập nhật số lượng IP thêm vô node của các bạn (luu ý stake tối thiều 1025IP, còn để đủ cho node active thì stake số lượng phải lớn hon top 100 validator)
 
 ```
@@ -298,7 +298,6 @@ story validator stake
 --private-key your_private_key
 ```
 - Ví dụ mình muốn stake thêm vào node mình 5368 IP nữa thì mình sẽ viết câu lệnh như sau:
-
 ```
 story validator stake 
 --validator-pubkey "AgmYC5fB37rzzu6e5TV4iHJOuGPSx5Pc/v6SFK1vpCKW" 
