@@ -159,7 +159,7 @@ Nếu ko check được bằng lệnh trên thì check bằng lệnh này:
 curl -s localhost:26657/status | jq
 ```
 - Check được như hình này là đã chạy thành công.
-- ![image](https://github.com/user-attachments/assets/4108bf11-45d6-4edd-848c-42c318c39d12)
+- ![image](https://github.com/user-attachments/assets/76088368-5e0e-458a-99ab-79af783ac7e4)
 
 ### Note: nếu dùng 2 lệnh trên không chạy được thì cài "jp" bằng lệnh này "sudo apt install jq" => "Y" => chạy lại lệnh "curl -s localhost:26657/status | jq" là thành công
 
@@ -260,7 +260,8 @@ Get the wallet address for faucet
 
 Get it from faucet : https://faucet.story.foundation/
 
-### Chú ý: Chờ khi nào trạng thái "catchin_up": chuyển sang "false" rồi mới được stake IP (Check the sync the catching up must be 'false')
+### Chú ý: Chờ khi nào trạng thái "catchin_up": chuyển sang "false" rồi mới chayk lệnh stake IP ở mục 6.5 (Check the sync the catching up must be 'false')
+
 Dùng lệnh này để check Sync
 ```
 curl -s localhost:26657/status | jq
@@ -268,7 +269,6 @@ curl -s localhost:26657/status | jq
 Chỉ stake khi trạng thái "catching_up": false
 
 ## 6.5. Validator registering
-
 Replace "your_private_key" with your key from the step2
 
 ```
@@ -285,7 +285,38 @@ curl -s localhost:26657/status | jq -r '.result.validator_info'
 Explorer: https://testnet.story.explorers.guru/
 Paste HEX Validator Address to search
 
-## Các bạn làm hết đến bước 6.7 là đã chạy node thành công, còn node các bạn có được active hay không thì phải có đủ số lượng IP stake để lọt vô top 100 sẽ active. Kiềm tra top 100 Validators active ở đây để biết chính xác số IP cần stake => https://staking.story.foundation/
+### Các bạn làm hết đến bước 6.7 là đã chạy node thành công, tuy nhiên node chỉ chạy thành công thôi chứ chưa active node được, để active thid node phải stake số lượng IP lớn hơn validaytor của top 100.. Kiềm tra top 100 Validators active ở đây https://staking.story.foundation/ để biết chính xác số IP cần stake. 
+
+## 6.8. Stake thêm IP trên node để node active
+- Ở bước 6.5 các bạn mới chỉ stake có 1 IP (1000000000000000000 = 1 IP), vậy khi bạn có đủ số lượng IP để stake ở thời điểm hiện tại mình viết bài này thì phải cần 4000 IP stake trong node  thì node mới active và lot vào top 100 Validators.
+- Câu lệnh sau đây để cập nhật số lượng IP thêm vô node của các bạn (luu ý stake tối thiều 1025IP, còn để đủ cho node active thì stake số lượng phải lớn hon top 100 validator)
+
+```
+story validator stake
+--validator-pubkey "VALIDATOR_PUB_KEY_IN_VALUE"
+--stake AMOUNT_TO_STAKE_IN_WEI
+--private-key your_private_key
+```
+- Ví dụ mình muốn stake thêm vào node mình 5368 IP nữa thì mình sẽ viết câu lệnh như sau:
+
+```
+story validator stake 
+--validator-pubkey "AgmYC5fB37rzzu6e5TV4iHJOuGPSx5Pc/v6SFK1vpCKW" 
+--stake 5368000000000000000000 
+--private-key your_private_key
+```
+![image](https://github.com/user-attachments/assets/6f4b91af-c72f-4bed-ac01-5df52a1641e4)
+- Muốn xem thông tin như hình trên thì bạn dùng lệnh check Sync để lấy validator-pubkey-value
+```
+curl -s localhost:26657/status | jq
+```
+## 6.9. Unstake IP trên node
+```
+story validator unstake 
+--validator-pubkey "AgmYC5fB37rzzu6e5TV4iHJOuGPSx5Pc/v6SFK1vpCKW" 
+--unstake 5368000000000000000000 
+--private-key xxxxxxxxxxxxxxxxxx
+```
 
 ## Chúc các bạn thực hiện thành công
 
@@ -326,6 +357,16 @@ Lỗi khi khởi động dịch vụ: Kiểm tra logs dịch vụ bằng lệnh
 journalctl -u story-geth.service
 journalctl -u story.service
 ```
+- Nếu bạn muốn kiểm tra trạng thái của 'story' khi nó đang chạy, việc truy vấn nội bộ điểm cuối JSONRPC/HTTP sẽ rất hữu ích. Dưới đây là một số lệnh hữu ích để chạy:
+```
+curl localhost:26657/net_info | jq '.result.peers[].node_info.moniker'
+```
+Lệnh này sẽ cung cấp cho bạn danh sách các 'peer' đồng thuận mà node đang đồng bộ, được xác định bằng moniker.
+
+```
+curl localhost:26657/health
+```
+Lệnh này sẽ cho bạn biết node có đang hoạt động tốt hay không - dấu {} là đang hoạt động tốt.
 
 # 8. Delete node
 WARNING: Backup your data, private key, validator key before remove node.
