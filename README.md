@@ -161,7 +161,7 @@ curl -s localhost:26657/status | jq
 - Check được như hình này là đã chạy thành công.
 - ![image](https://github.com/user-attachments/assets/76088368-5e0e-458a-99ab-79af783ac7e4)
 
-### Note: nếu dùng 2 lệnh trên không chạy được thì cài "jp" bằng lệnh này "sudo apt install jq" => "Y" => chạy lại lệnh "curl -s localhost:26657/status | jq" là thành công
+### Note: nếu dùng 2 lệnh trên không chạy được thì cài "jp" bằng lệnh này ```sudo apt install jq``` => chọn "Y" => chạy lại lệnh ```curl -s localhost:26657/status | jq``` là thành công
 
 # 5. Sync đến block gần nhất trên hệ thống (SYNC using snapshot File)
 
