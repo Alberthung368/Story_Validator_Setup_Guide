@@ -285,44 +285,17 @@ curl -s localhost:26657/status | jq -r '.result.validator_info'
 Explorer: https://testnet.story.explorers.guru/
 Paste HEX Validator Address to search
 
-### Các bạn làm hết đến bước 6.7 là đã chạy node thành công, tuy nhiên node chỉ chạy thành công thôi chứ chưa active node được, để active thid node phải stake số lượng IP lớn hơn validaytor của top 100.. Kiềm tra top 100 Validators active ở đây https://staking.story.foundation/ để biết chính xác số IP cần stake. 
-
-## 6.8. Stake thêm IP trên node để node active
-- Ở bước 6.5 các bạn mới chỉ stake có 1 IP (1000000000000000000 = 1 IP), vậy khi bạn có đủ số lượng IP để stake ở thời điểm hiện tại mình viết bài này thì phải cần 4000 IP stake trong node  thì node mới active và lọt vào top 100 Validators.
-- Câu lệnh sau đây để cập nhật số lượng IP thêm vô node của các bạn (luu ý stake tối thiều 1025IP, còn để đủ cho node active thì stake số lượng phải lớn hon top 100 validator)
-
-```
-story validator stake
---validator-pubkey "VALIDATOR_PUB_KEY_IN_VALUE"
---stake AMOUNT_TO_STAKE_IN_WEI
---private-key your_private_key
-```
-- Ví dụ mình muốn stake thêm vào node mình 1025 IP nữa thì mình sẽ viết câu lệnh như sau:
-```
-story validator stake 
---validator-pubkey "AgmYC5fB37rzzu6e5TV4iHJOuGPSx5Pc/v6SFK1vpCKW" 
---stake 1025000000000000000000 
---private-key 05148xxxxx1fs6
-```
-![image](https://github.com/user-attachments/assets/6f4b91af-c72f-4bed-ac01-5df52a1641e4)
-- Muốn xem thông tin như hình trên thì bạn dùng lệnh check Sync để lấy validator-pubkey-value
-```
-curl -s localhost:26657/status | jq
-```
-- Sau khi stake thêm 1025IP thì sẽ hiện thành công như hình này
-- ![image](https://github.com/user-attachments/assets/2a586660-e3ec-4883-ac97-a846be03946a)
-
-## 6.9. Unstake IP trên node
+## 6.8. Unstake IP trên node
 ```
 story validator unstake 
 --validator-pubkey "AgmYC5fB37rzzu6e5TV4iHJOuGPSx5Pc/v6SFK1vpCKW" 
 --unstake 5368000000000000000000 
 --private-key xxxxxxxxxxxxxxxxxx
 ```
-# 6.10. UPGARDE NODE 
+# 6.9. UPGARDE NODE 
 - Hiện tại STORY đã cho nâng cấp lên bản mới là v0.10.0 vào ngày 17/9/2024. Trước khi upgarade lên v0.10.0 thì ae phải upgrade lên bản v0.9.13 trước.
 - Các bước làm như sau:
-### 6.10.1. Upgrade v0.9.13
+### 6.9.1. Upgrade v0.9.13
 - Stop node Story:
 ```
 sudo systemctl stop story
@@ -349,7 +322,7 @@ curl -s localhost:26657/status | jq
 ```
 - ![image](https://github.com/user-attachments/assets/77f36e8a-534f-4871-b5ad-a873145e224a)
 
-### 6.10.1. Upgrade v0.10.1: \\Upgrade with manual:
+### 6.9.2. Upgrade v0.10.1: \\Upgrade with manual:
 - Step1:
 ```
 cd ~
@@ -382,6 +355,33 @@ curl -s localhost:26657/status | jq
 ```
 - ![image](https://github.com/user-attachments/assets/77f36e8a-534f-4871-b5ad-a873145e224a)
   
+### Các bạn làm hết đến bước 6.9.2 là đã chạy node thành công, tuy nhiên node chỉ chạy thành công thôi chứ chưa active node được, để active thì node phải stake số lượng IP lớn hơn validaytor của top 100.. Kiềm tra top 100 Validators active ở đây https://staking.story.foundation/ để biết chính xác số IP cần stake. 
+
+## 6.10. Stake thêm IP trên node để node active
+- Ở bước 6.5 các bạn mới chỉ stake có 1 IP (1000000000000000000 = 1 IP), vậy khi bạn có đủ số lượng IP để stake ở thời điểm hiện tại mình viết bài này thì phải cần 4000 IP stake trong node  thì node mới active và lọt vào top 100 Validators.
+- Câu lệnh sau đây để cập nhật số lượng IP thêm vô node của các bạn (luu ý stake tối thiều 1025IP, còn để đủ cho node active thì stake số lượng phải lớn hon top 100 validator)
+
+```
+story validator stake
+--validator-pubkey "VALIDATOR_PUB_KEY_IN_VALUE"
+--stake AMOUNT_TO_STAKE_IN_WEI
+--private-key your_private_key
+```
+- Ví dụ mình muốn stake thêm vào node mình 1025 IP nữa thì mình sẽ viết câu lệnh như sau:
+```
+story validator stake 
+--validator-pubkey "AgmYC5fB37rzzu6e5TV4iHJOuGPSx5Pc/v6SFK1vpCKW" 
+--stake 1025000000000000000000 
+--private-key 05148xxxxx1fs6
+```
+![image](https://github.com/user-attachments/assets/6f4b91af-c72f-4bed-ac01-5df52a1641e4)
+- Muốn xem thông tin như hình trên thì bạn dùng lệnh check Sync để lấy validator-pubkey-value
+```
+curl -s localhost:26657/status | jq
+```
+- Sau khi stake thêm 1025IP thì sẽ hiện thành công như hình này
+- ![image](https://github.com/user-attachments/assets/2a586660-e3ec-4883-ac97-a846be03946a)
+
 ## Chúc các bạn thực hiện thành công
 
 ==========================================================================
