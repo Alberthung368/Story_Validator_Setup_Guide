@@ -309,7 +309,7 @@ sudo systemctl restart story && sudo systemctl status story
 ```
 sudo journalctl -u story -f -o cat
 ```
-- Check Sync: Check trạng thái “Catching_up” và chờ chuyển từ ‘true’ sang ‘fale’
+- Check Sync: Check trạng thái “Catching_up” và chờ chuyển từ ‘true’ sang ‘false’
 ```
 curl -s localhost:26657/status | jq
 ```
@@ -342,7 +342,7 @@ sudo systemctl status story
 ```
 sudo journalctl -u story -f -o cat
 ```
-- Step 6: Check Sync: Check trạng thái “Catching_up” và chờ chuyển từ ‘true’ sang ‘fale’ là có thể stake được.
+- Step 6: Check Sync: Check trạng thái “Catching_up” và chờ chuyển từ ‘true’ sang ‘false’ là có thể stake được.
 ```
 curl -s localhost:26657/status | jq
 ```
