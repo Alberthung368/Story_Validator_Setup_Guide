@@ -319,7 +319,69 @@ story validator unstake
 --unstake 5368000000000000000000 
 --private-key xxxxxxxxxxxxxxxxxx
 ```
+# 6.10. UPGARDE NODE 
+- Hiện tại STORY đã cho nâng cấp lên bản mới là v0.10.0 vào ngày 17/9/2024. Trước khi upgarade lên v0.10.0 thì ae phải upgrade lên bản v0.9.13 trước.
+- Các bước làm như sau:
+### 6.10.1. Upgrade v0.9.13
+- Stop node Story:
+```
+sudo systemctl stop story
+```
+- Upgrade v0.9.13
+```
+wget https://story-geth-binaries.s3.us-west-1.amazonaws.com/story-public/story-linux-amd64-0.9.13-b4c7db1.tar.gz
+tar -xzvf story-linux-amd64-0.9.13-b4c7db1.tar.gz
+sudo cp story-linux-amd64-0.9.13-b4c7db1/story $HOME/go/bin
+source $HOME/.bash_profile
+story version
+```
+- Restart node:
+```
+sudo systemctl restart story && sudo systemctl status story
+```
+- Check logs:
+```
+sudo journalctl -u story -f -o cat
+```
+- Check Sync: Check trạng thái “Catching_up” và chờ chuyển từ ‘true’ sang ‘fale’
+```
+curl -s localhost:26657/status | jq
+```
+- ![image](https://github.com/user-attachments/assets/77f36e8a-534f-4871-b5ad-a873145e224a)
 
+### 6.10.1. Upgrade v0.10.1: \\Upgrade with manual:
+- Step1:
+```
+cd ~
+wget https://story-geth-binaries.s3.us-west-1.amazonaws.com/story-public/story-linux-amd64-0.10.0-9603826.tar.gz
+tar -xzvf story-linux-amd64-0.10.0-9603826.tar.gz
+```
+- Step2:
+```
+sudo systemctl stop story
+```
+- Step3:
+```
+cp ~/story-linux-amd64-0.10.0-9603826/story ~/go/bin
+source ~/.bash_profile
+story version
+```
+- Step4:
+```
+sudo systemctl daemon-reload && \
+sudo systemctl start story && \
+sudo systemctl status story
+```
+- Step 5: check your detail block
+```
+sudo journalctl -u story -f -o cat
+```
+- Step 6: Check Sync: Check trạng thái “Catching_up” và chờ chuyển từ ‘true’ sang ‘fale’ là có thể stake được.
+```
+curl -s localhost:26657/status | jq
+```
+- ![image](https://github.com/user-attachments/assets/77f36e8a-534f-4871-b5ad-a873145e224a)
+  
 ## Chúc các bạn thực hiện thành công
 
 ==========================================================================
