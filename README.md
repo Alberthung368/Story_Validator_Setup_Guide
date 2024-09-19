@@ -297,18 +297,21 @@ story validator stake
 --stake AMOUNT_TO_STAKE_IN_WEI
 --private-key your_private_key
 ```
-- Ví dụ mình muốn stake thêm vào node mình 5368 IP nữa thì mình sẽ viết câu lệnh như sau:
+- Ví dụ mình muốn stake thêm vào node mình 1025 IP nữa thì mình sẽ viết câu lệnh như sau:
 ```
 story validator stake 
 --validator-pubkey "AgmYC5fB37rzzu6e5TV4iHJOuGPSx5Pc/v6SFK1vpCKW" 
---stake 5368000000000000000000 
---private-key your_private_key
+--stake 1025000000000000000000 
+--private-key 05148xxxxx1fs6
 ```
 ![image](https://github.com/user-attachments/assets/6f4b91af-c72f-4bed-ac01-5df52a1641e4)
 - Muốn xem thông tin như hình trên thì bạn dùng lệnh check Sync để lấy validator-pubkey-value
 ```
 curl -s localhost:26657/status | jq
 ```
+- Sau khi stake thêm 1025IP thì sẽ hiện thành công như hình này
+- ![image](https://github.com/user-attachments/assets/2a586660-e3ec-4883-ac97-a846be03946a)
+
 ## 6.9. Unstake IP trên node
 ```
 story validator unstake 
