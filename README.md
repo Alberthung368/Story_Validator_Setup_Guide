@@ -372,13 +372,29 @@ curl -s localhost:26657/status | jq
 - Sau khi stake thêm 1025IP thì sẽ hiện thành công như hình này
 - ![image](https://github.com/user-attachments/assets/2a586660-e3ec-4883-ac97-a846be03946a)
 
-## 6.10. Unstake IP trên node
+## 6.10. Unstake IP trên node của anh em: (làm giống mục 6.9)
 ```
 story validator unstake \
    --validator-pubkey "VALIDATOR_PUB_KEY_IN_BASE64" \
    --unstake 1024000000000000000000 \
    --private-key xxxxxxxxxxxxxx
 ```
+## 6.11. Unstake IP trên node của của người khác mà anh em đã stake vô:
+**** Cách lấy thông tin của Validator:
+- Top 100 Validator => https://testnet.story.explorers.guru/validators
+
+- Ví dụ lấy thông tin của varlidator top 2 mà mình đã stake vào đây 1024IP.
+1. Vào validator top 2 trên guru xem => https://testnet.story.explorers.guru/validator/storyvaloper1qzgsp7x8pgwm8gw42kq2w8v2tyn6egjcanaqp8
+
+2. Xem và copy thông tin mục Operator (VALIDATOR_PUB_KEY_IN_BASE64): 
+storyvaloper1qzgsp7x8pgwm8gw42kq2w8v2tyn6egjcanaqp8
+
+3. Chạy lệnh trên terminal:
+Ví dụ:
+```
+curl https://api-story-testnet.trusted-point.com/cosmos/staking/v1beta1/validators/storyvaloper1qzgsp7x8pgwm8gw42kq2w8v2tyn6egjcanaqp8 | jq .validator.consensus_pubkey.key
+```
+
 - Chú ý: "VALIDATOR_PUB_KEY_IN_BASE64" = "Operator info"
 - Cách lấy Operator info: vào đây => https://testnet.story.explorers.guru/ rồi chọn validator mà anh em đã stake trong đó và xem (Xem hình)
 - ![image](https://github.com/user-attachments/assets/fa8bd8a6-a7b2-4414-b184-823cf7073fde)
