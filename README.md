@@ -355,10 +355,10 @@ curl -s localhost:26657/status | jq
 - Câu lệnh sau đây để cập nhật số lượng IP thêm vô node của các bạn (luu ý stake tối thiều 1025IP, còn để đủ cho node active thì stake số lượng phải lớn hon top 100 validator)
 
 ```
-story validator stake
- --validator-pubkey "VALIDATOR_PUB_KEY_IN_VALUE"
- --stake AMOUNT_TO_STAKE_IN_WEI
- --private-key your_private_key xxxxxxx
+story validator stake \
+   --validator-pubkey "VALIDATOR_PUB_KEY_IN_BASE64" \
+   --stake 1024000000000000000000 \
+   --private-key xxxxxxxxxx
 ```
 - Ví dụ mình muốn stake thêm vào node mình 1101 IP nữa thì mình sẽ viết câu lệnh như sau:
 ```
@@ -374,11 +374,14 @@ curl -s localhost:26657/status | jq
 
 ## 6.10. Unstake IP trên node
 ```
-story validator unstake
- --validator-pubkey "AgmYC5fB37rzzu6e5TV4iHJOuGPSx5Pc/v6SFK1vpCKW"
- --unstake 1101000000000000000000
- --private-key 05148xxxxx1fs6
+story validator unstake \
+   --validator-pubkey "VALIDATOR_PUB_KEY_IN_BASE64" \
+   --unstake 1024000000000000000000 \
+   --private-key xxxxxxxxxxxxxx
 ```
+- Chú ý: "VALIDATOR_PUB_KEY_IN_BASE64" = "Operator info"
+- Cách lấy Operator info: vào đây => https://testnet.story.explorers.guru/ rồi chọn validator mà anh em đã stake trong đó và xem (Xem hình)
+- ![image](https://github.com/user-attachments/assets/fa8bd8a6-a7b2-4414-b184-823cf7073fde)
 
 ## Chúc các bạn thực hiện thành công
 
