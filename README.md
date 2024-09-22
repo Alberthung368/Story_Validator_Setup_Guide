@@ -180,31 +180,21 @@ sudo systemctl stop story-geth
 ```
 cd $HOME
 rm -f Geth_snapshot.lz4
-if curl -s --head https://vps6.josephtran.xyz/Story/Geth_snapshot.lz4 | head -n 1 | grep "200" > /dev/null; then
-    echo "Snapshot found, downloading..."
-    aria2c -x 16 -s 16 https://vps6.josephtran.xyz/Story/Geth_snapshot.lz4 -o Geth_snapshot.lz4
-else
-    echo "No snapshot found."
-fi
+wget --show-progress https://josephtran.co/Geth_snapshot.lz4
 ```
 Chạy đoạn lệnh trên và đợi tải Geth-data về thành công 
 ## 5.4. Download Story-data
 ```
 cd $HOME
 rm -f Story_snapshot.lz4
-if curl -s --head https://vps6.josephtran.xyz/Story/Story_snapshot.lz4 | head -n 1 | grep "200" > /dev/null; then
-    echo "Snapshot found, downloading..."
-    aria2c -x 16 -s 16 https://vps6.josephtran.xyz/Story/Story_snapshot.lz4 -o Story_snapshot.lz4
-else
-    echo "No snapshot found."
-fi
+wget --show-progress https://josephtran.co/Story_snapshot.lz4
 ```
 Chạy đoạn lệnh trên và đợi tải Story-data về thành công (hoặc có thể mở tab mới để chạy và tải Story-data song song với tab đang tải Geth-data cũng được.
 Sau khi tải xong Geth-data và Story-data thì chạy các lệnh dưới đây tiếp theo
 
 ## Backup priv_validator_state.json:
 ```
-mv $HOME/.story/story/data/priv_validator_state.json $HOME/.story/priv_validator_state.json.backup
+cp ~/.story/story/data/priv_validator_state.json ~/.story/priv_validator_state.json.backup
 ```
 ## Remove old data
 ```
