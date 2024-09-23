@@ -11,7 +11,7 @@ https://pq.hosting/?from=719019
 |--------------|-------------------------|
 | **CPU**      | 4 Cores                 |
 | **RAM**      | 8 GB                    |
-| **Disk**     | 200 GB                  |
+| **Disk**     | 800 GB                  |
 | **Bandwidth**| 10 MBit/s               |
 
 Tham gia với chúng tôi trên group telegram => https://t.me/Crypto_Confessions
@@ -144,11 +144,29 @@ Mở tab riêng để check
 ```
 sudo journalctl -u story-geth -f -o cat
 ```
+Chờ hệ thống kết nối peers
+- Nếu không kết nối đc thì chạy đoạn Peers sau: Live Peers
+```
+PEERS=$(curl -s -X POST https://rpc-story.josephtran.xyz -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"net_info","params":[],"id":1}' | jq -r '.result.peers[] | select(.connection_status.SendMonitor.Active == true) | "\(.node_info.id)@\(if .node_info.listen_addr | contains("0.0.0.0") then .remote_ip + ":" + (.node_info.listen_addr | sub("tcp://0.0.0.0:"; "")) else .node_info.listen_addr | sub("tcp://"; "") end)"' | tr '\n' ',' | sed 's/,$//' | awk '{print "\"" $0 "\""}')
+
+sed -i "s/^persistent_peers *=.*/persistent_peers = $PEERS/" "$HOME/.story/story/config/config.toml"
+
+if [ $? -eq 0 ]; then
+    echo -e "Configuration file updated successfully with new peers"
+else
+    echo "Failed to update configuration file."
+fi
+```
+- Chạy lại:
+```
+sudo journalctl -u story-geth -f -o cat
+```
 ## 4.2 Story logs
 Mở tab riêng để check
 ```
 sudo journalctl -u story -f -o cat
 ```
+Chờ hệ thống chạy
 ## 4.3 Check sync status
 
 ```
@@ -163,9 +181,34 @@ curl -s localhost:26657/status | jq
 
 ### Note: nếu dùng 2 lệnh trên không chạy được thì cài "jp" bằng lệnh này ```sudo apt install jq``` => chọn "Y" => chạy lại lệnh ```curl -s localhost:26657/status | jq``` là thành công
 
+## 4.4. Upgrade node
+### Upgrade manually
+- Download new binary
+```
+cd $HOME
+wget https://story-geth-binaries.s3.us-west-1.amazonaws.com/story-public/story-linux-amd64-0.10.0-9603826.tar.gz
+tar -xzvf story-linux-amd64-0.10.0-9603826.tar.gz
+```
+- Stop node
+```
+sudo systemctl stop story
+```
+- Copy binary to $HOME/go/bin to use it anywhere
+```
+cp $HOME/story-linux-amd64-0.10.0-9603826/story $HOME/go/bin
+source $HOME/.bash_profile
+story version
+```
+- Restart node
+```
+sudo systemctl daemon-reload && \
+sudo systemctl start story && \
+sudo systemctl status story
+```
+
 # 5. Sync đến block gần nhất trên hệ thống (SYNC using snapshot File)
 
-## Tham khảo và trích lọc từ 'Joseph Tran': https://service.josephtran.xyz/testnet/story/installation
+## Tham khảo và trích lọc từ 'Joseph Tran': (https://service.josephtran.xyz/testnet/story/snapshot)
 
 ## 5.1. Cài đặt công cụ  (Install tool)
 ```
@@ -189,8 +232,7 @@ cd $HOME
 rm -f Story_snapshot.lz4
 wget --show-progress https://josephtran.co/Story_snapshot.lz4
 ```
-Chạy đoạn lệnh trên và đợi tải Story-data về thành công (hoặc có thể mở tab mới để chạy và tải Story-data song song với tab đang tải Geth-data cũng được.
-Sau khi tải xong Geth-data và Story-data thì chạy các lệnh dưới đây tiếp theo
+Chạy đoạn lệnh trên và đợi tải Story-data về thành công.
 
 ## Backup priv_validator_state.json:
 ```
@@ -208,7 +250,7 @@ sudo mkdir -p /root/.story/story/data
 ```
 lz4 -d Story_snapshot.lz4 | pv | sudo tar xv -C /root/.story/story/
 ```
-Chờ tải về xong rồi tiếp tục chạy lệnh dưới
+Chờ giải nén xong rồi tiếp tục chạy lệnh dưới
 ## 5.6. Extract Geth-data
 ```
 sudo mkdir -p /root/.story/geth/iliad/geth/chaindata
@@ -216,11 +258,11 @@ sudo mkdir -p /root/.story/geth/iliad/geth/chaindata
 ```
 lz4 -d Geth_snapshot.lz4 | pv | sudo tar xv -C /root/.story/geth/iliad/geth/
 ```
-Chờ tải về ong rồi chạy lệnh dưới 
+Chờ chờ giải nén xong rồi chạy lệnh dưới 
 
 ## Move priv_validator_state.json back
 ```
-mv $HOME/.story/priv_validator_state.json.backup $HOME/.story/story/data/priv_validator_state.json
+cp ~/.story/priv_validator_state.json.backup ~/.story/story/data/priv_validator_state.json
 ```
 ## Restart node 
 ```
@@ -229,7 +271,6 @@ sudo systemctl start story-geth
 ```
 
 # 6. Register your Validator
-
 ## 6.1. Export wallet:
 ```
 story validator export --export-evm-key
@@ -250,7 +291,7 @@ Get the wallet address for faucet
 
 Get it from faucet : https://faucet.story.foundation/
 
-### Chú ý: Chờ khi nào trạng thái "catchin_up": chuyển sang "false" rồi mới chạy lệnh stake IP ở mục 6.5 (Check the sync the catching up must be 'false')
+### Chú ý: Chờ khi nào trạng thái "catchin_up": chuyển từ "Truse" sang "false" rồi mới chạy lệnh stake IP ở mục 6.5 (Check the sync the catching up must be 'false')
 
 Dùng lệnh này để check Sync
 ```
@@ -262,87 +303,23 @@ Chỉ stake khi trạng thái "catching_up": false
 Replace "your_private_key" with your key from the step2
 
 ```
-story validator create --stake 1000000000000000000 --private-key "your_private_key"
+story validator create --stake 10000000000000000000 --private-key "your_private_key"
 ```
-
+- 10000000000000000000 = 10 IP
+- 
 ## 6.6. Check your validator INFO
 ```
 curl -s localhost:26657/status | jq -r '.result.validator_info' 
 ```
-
 ## 6.7. check your validator
 
 Explorer: https://testnet.story.explorers.guru/
 Paste HEX Validator Address to search
 
-# 6.8. UPGARDE NODE 
-- Hiện tại STORY đã cho nâng cấp lên bản mới là v0.10.0 vào ngày 17/9/2024. Trước khi upgarade lên v0.10.0 thì ae phải upgrade lên bản v0.9.13 trước.
-- Các bước làm như sau:
-### 6.8.1. Upgrade v0.9.13
-- Stop node Story:
-```
-sudo systemctl stop story
-```
-- Upgrade v0.9.13
-```
-wget https://story-geth-binaries.s3.us-west-1.amazonaws.com/story-public/story-linux-amd64-0.9.13-b4c7db1.tar.gz
-tar -xzvf story-linux-amd64-0.9.13-b4c7db1.tar.gz
-sudo cp story-linux-amd64-0.9.13-b4c7db1/story $HOME/go/bin
-source $HOME/.bash_profile
-story version
-```
-- Restart node:
-```
-sudo systemctl restart story && sudo systemctl status story
-```
-- Check logs:
-```
-sudo journalctl -u story -f -o cat
-```
-- Check Sync: Check trạng thái “Catching_up” và chờ chuyển từ ‘true’ sang ‘false’
-```
-curl -s localhost:26657/status | jq
-```
-- ![image](https://github.com/user-attachments/assets/77f36e8a-534f-4871-b5ad-a873145e224a)
+### Các bạn làm hết đến bước 6.5 là đã chạy node thành công, tuy nhiên node chỉ chạy thành công thôi chứ chưa active node được, để active thì node phải stake số lượng IP lớn hơn validaytor của top 100.. Kiềm tra top 100 Validators active ở đây https://staking.story.foundation/ để biết chính xác số IP cần stake. 
 
-### 6.8.2. Upgrade v0.10.1: \\Upgrade with manual:
-- Step1:
-```
-cd ~
-wget https://story-geth-binaries.s3.us-west-1.amazonaws.com/story-public/story-linux-amd64-0.10.0-9603826.tar.gz
-tar -xzvf story-linux-amd64-0.10.0-9603826.tar.gz
-```
-- Step2:
-```
-sudo systemctl stop story
-```
-- Step3:
-```
-cp ~/story-linux-amd64-0.10.0-9603826/story ~/go/bin
-source ~/.bash_profile
-story version
-```
-- Step4:
-```
-sudo systemctl daemon-reload && \
-sudo systemctl start story && \
-sudo systemctl status story
-```
-- Step 5: check your detail block
-```
-sudo journalctl -u story -f -o cat
-```
-- Step 6: Check Sync: Check trạng thái “Catching_up” và chờ chuyển từ ‘true’ sang ‘false’ là có thể stake được.
-```
-curl -s localhost:26657/status | jq
-```
-- ![image](https://github.com/user-attachments/assets/77f36e8a-534f-4871-b5ad-a873145e224a)
-  
-### Các bạn làm hết đến bước 6.8.2 là đã chạy node thành công, tuy nhiên node chỉ chạy thành công thôi chứ chưa active node được, để active thì node phải stake số lượng IP lớn hơn validaytor của top 100.. Kiềm tra top 100 Validators active ở đây https://staking.story.foundation/ để biết chính xác số IP cần stake. 
-
-## 6.9. Stake thêm IP trên node để node active
-- Ở bước 6.5 các bạn mới chỉ stake có 1 IP (1000000000000000000 = 1 IP), vậy khi bạn có đủ số lượng IP để stake ở thời điểm hiện tại mình viết bài này thì phải cần 4000 IP stake trong node  thì node mới active và lọt vào top 100 Validators.
-- Câu lệnh sau đây để cập nhật số lượng IP thêm vô node của các bạn (luu ý stake tối thiều 1025IP, còn để đủ cho node active thì stake số lượng phải lớn hon top 100 validator)
+## 6.8. Stake thêm IP trên node để node active (Validator Staking)
+- Stake IP thêm vô node của các bạn (luu ý stake tối thiều 1024IP, còn để đủ cho node active thì stake số lượng phải lớn hon top 100 validator)
 
 ```
 story validator stake \
@@ -350,16 +327,20 @@ story validator stake \
    --stake 1024000000000000000000 \
    --private-key xxxxxxxxxx
 ```
-- Ví dụ mình muốn stake thêm vào node mình 1101 IP nữa thì mình sẽ viết câu lệnh như sau:
+- Ví dụ:
 ```
-story validator stake --validator-pubkey "AgmYC5fB37rzzu6e5TV4iHJOuGPSx5Pc/v6SFK1vpCKW" --stake 1101000000000000000000 --private-key 0xgsd.....1ukt4
+story validator stake \
+ --validator-pubkey "AgmYC5fB37rzzu6e5TV4iHJOuGPSx5Pc/v6SFK1vpCKW" \
+ --stake 1101000000000000000000 \
+ --private-key 0xgsd.....1ukt4
 ```
+- Đổi "VALIDATOR_PUB_KEY_IN_BASE64" thành của các bạn
 ![image](https://github.com/user-attachments/assets/6f4b91af-c72f-4bed-ac01-5df52a1641e4)
 - Muốn xem thông tin như hình trên thì bạn dùng lệnh check Sync để lấy validator-pubkey-value
 ```
 curl -s localhost:26657/status | jq
 ```
-- Sau khi stake thêm 1025IP thì sẽ hiện thành công như hình này
+- Sau khi stake thêm 1101IP thì sẽ hiện thành công như hình này
 - ![image](https://github.com/user-attachments/assets/2a586660-e3ec-4883-ac97-a846be03946a)
 
 ## 6.10. Unstake IP trên node của anh em: (làm giống mục 6.9)
